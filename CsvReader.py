@@ -43,7 +43,7 @@ class ExcelCreator():
       if row == 0:
          self.sheet1.write(row, column, data, self.header_style)
       elif row > 1:
-         self.sheet1.write(row, column, data, self.table_style)   
+         self.sheet1.write(row - 1, column, data, self.table_style)   
 
 def open_csv_file(filename):
    try:
@@ -51,8 +51,10 @@ def open_csv_file(filename):
       csvfile = open(filename, 'rb')
       filedata = csv.reader(csvfile, delimiter=';')
       for linenumber, row in enumerate(filedata):
+         totalcolumns = len(row)
          for columnnumber, column in enumerate(row):
-            excelCreator.inputData(linenumber, columnnumber, column)
+            if column.strip() or columnnumber + 1 < totalcolumns:
+               excelCreator.inputData(linenumber, columnnumber, column)
       excelCreator.saveFile(filename[:filename.find(".csv")])
 
    except:
