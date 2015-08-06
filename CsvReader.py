@@ -37,7 +37,11 @@ class ExcelCreator():
         self.table_style.alignment = alignmentSetup
         
    def saveFile(self, filename):
-       self.book.save(filename + ".xls")
+      filename = str(filename)
+      if filename.endswith(".xls"):
+         self.book.save(filename)
+      else:
+         self.book.save(filename + ".xls")
 
    def inputData(self, row, column, data):
       if row == 0:
@@ -45,19 +49,21 @@ class ExcelCreator():
       elif row > 1:
          self.sheet1.write(row - 1, column, data, self.table_style)   
 
-def open_csv_file(filename):
+def open_csv_file(inputFilename, outputFilename):
    try:
       excelCreator = ExcelCreator()
-      csvfile = open(filename, 'rb')
+      csvfile = open(inputFilename, 'rb')
       filedata = csv.reader(csvfile, delimiter=';')
       for linenumber, row in enumerate(filedata):
          totalcolumns = len(row)
          for columnnumber, column in enumerate(row):
             if column.strip() or columnnumber + 1 < totalcolumns:
                excelCreator.inputData(linenumber, columnnumber, column)
-      excelCreator.saveFile(filename[:filename.find(".csv")])
+      excelCreator.saveFile(outputFilename)
+      return True
 
    except:
+      return False
       print "No se puede leer el archivo"
 
 if __name__ == "__main__":
