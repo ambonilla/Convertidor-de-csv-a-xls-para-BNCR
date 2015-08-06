@@ -58,6 +58,8 @@ class MainWindow(QMainWindow):
          self.excelCreator.saveFile(self.saveFilePath)
          QMessageBox.information(self, "Aviso", u'Archivo guardado.')
          self.ui.filePath.setText("")
+         self.openFilePath = ""
+         self.saveFilePath = ""
 
 
       except:
